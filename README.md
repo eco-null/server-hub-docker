@@ -11,14 +11,14 @@ Thin wrapper: runs the prebuilt `ghcr.io/eco-null/server-hub:latest` image non-r
 
 ## Quick start (CLI)
 1. Clone this repo (or just copy `docker-compose.yml`): `git clone https://github.com/eco-null/server-hub-docker.git && cd server-hub-docker`
-2. `cp .env.example .env` — set `HUB_PASSWORD` to a strong value (`openssl rand -base64 24`)
+2. Edit `HUB_PASSWORD` in `docker-compose.yml` to a strong value (`openssl rand -base64 24`).
 3. `docker compose up -d`
 4. Open http://<host>:8643 — sign in at `/login`
 
 ## CasaOS install (Custom App)
 1. In CasaOS, go to **Apps → Custom App**.
 2. Paste the contents of `docker-compose.yml`.
-3. Create a `.env` file next to the compose file (required): `HUB_USER=admin`, `HUB_PASSWORD=<your-password>`.
+3. Set `HUB_USER` and `HUB_PASSWORD` in the compose env block (or the CasaOS environment form) to your values.
 4. Click **Install**. CasaOS pulls the prebuilt image `ghcr.io/eco-null/server-hub:latest` and starts the container.
 
 ## Environment variables
@@ -38,13 +38,14 @@ Thin wrapper: runs the prebuilt `ghcr.io/eco-null/server-hub:latest` image non-r
 The compose file mounts the host's `/proc`, `/etc/hostname`, and root `/` read-only, so CPU / memory / disk / hostname widgets show the **CasaOS host's** values. The `HUB_DISK_PATH=/host` env var (backed by a small patch to upstream `server.py`) makes the disk widget read the host root. If a mount is unavailable the widget shows `—`; the app keeps serving.
 
 ## Security notes
+> **Before first start:** replace the placeholder `HUB_PASSWORD: CHANGE_ME` in the compose file — leaving it unchanged starts the server with a known, weak password.
+
 - The container runs as a non-root `app` user; the entrypoint drops privileges with `su-exec` before starting the server.
-- Secrets live only in `.env`, which is gitignored — never commit it.
 - The compose file bind-mounts `- /:/host:ro`, granting the container **read access to the whole host filesystem**. That tradeoff is required for host disk stats and is limited to this container's network — don't add other containers to this compose project.
 
 ## Troubleshooting
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| Container exits immediately | `HUB_PASSWORD` empty | Set it in `.env` |
+| Container exits immediately | `HUB_PASSWORD` empty | Set it in `docker-compose.yml` |
 | Stats show `—` | `/proc`/`/host` mount unavailable | Check compose `volumes:` are intact |
 | Port conflict | `8643` in use | Change the left side of `8643:8643` |
