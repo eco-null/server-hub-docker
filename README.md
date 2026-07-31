@@ -19,7 +19,7 @@ Thin wrapper: the image clones upstream `server-hub` at build time and runs it n
 1. Build the image once: `docker build -t server-hub:local .`
 2. In CasaOS, go to **Apps → Custom App**.
 3. Paste the contents of `docker-compose.yml`.
-4. Create a `.env` file (or set the two environment variables in the CasaOS form): `HUB_USER=admin`, `HUB_PASSWORD=<your-password>`.
+4. Create a `.env` file **next to the compose file** (CasaOS stores it under the app's project directory) with `HUB_USER=admin`, `HUB_PASSWORD=<your-password>`. The `.env` file must exist before install — compose refuses to start if it's missing, and there is no "set variables in the form" alternative.
 5. Click **Install**. CasaOS starts the container; the dashboard appears under the configured port.
 
 ## Environment variables
@@ -27,7 +27,7 @@ Thin wrapper: the image clones upstream `server-hub` at build time and runs it n
 |---|---|---|
 | `HUB_USER` | `admin` | Sign-in username |
 | `HUB_PASSWORD` | — (required) | Sign-in password; server exits if empty |
-| `HUB_PORT` | `8643` | Container listen port |
+| `HUB_PORT` | `8642` | Container listen port (compose sets `8643`) |
 | `HUB_HOST` | `0.0.0.0` | Bind address |
 | `HUB_DISK_PATH` | `/` | Filesystem path read for the disk widget (`/host` = CasaOS host root) |
 
@@ -37,6 +37,11 @@ Thin wrapper: the image clones upstream `server-hub` at build time and runs it n
 
 ## Host stats
 The compose file mounts the host's `/proc`, `/etc/hostname`, and root `/` read-only, so CPU / memory / disk / hostname widgets show the **CasaOS host's** values. The `HUB_DISK_PATH=/host` env var (backed by a small patch to upstream `server.py`) makes the disk widget read the host root. If a mount is unavailable the widget shows `—`; the app keeps serving.
+
+## Security notes
+- The container runs as a non-root `app` user; the entrypoint drops privileges with `su-exec` before starting the server.
+- Secrets live only in `.env`, which is gitignored — never commit it.
+- The compose file bind-mounts `- /:/host:ro`, granting the container **read access to the whole host filesystem**. That tradeoff is required for host disk stats and is limited to this container's network — don't add other containers to this compose project.
 
 ## Troubleshooting
 | Symptom | Likely cause | Fix |
