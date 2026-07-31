@@ -1,0 +1,11 @@
+.git
+*.md
+docs/
+SETUP*.md
+tests.html
+test_server.py
+graphify-out/
+.planning/
+.superpowers/
+.opencode/
+.env
