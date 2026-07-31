@@ -18,7 +18,7 @@ Thin wrapper: runs the prebuilt `ghcr.io/eco-null/server-hub:latest` image non-r
 ## CasaOS install (Custom App)
 1. In CasaOS, go to **Apps → Custom App**.
 2. Paste the contents of `docker-compose.yml`.
-3. Create a `.env` file (or set the two environment variables in the CasaOS form): `HUB_USER=admin`, `HUB_PASSWORD=<your-password>`.
+3. Create a `.env` file next to the compose file (required): `HUB_USER=admin`, `HUB_PASSWORD=<your-password>`.
 4. Click **Install**. CasaOS pulls the prebuilt image `ghcr.io/eco-null/server-hub:latest` and starts the container.
 
 ## Environment variables
