@@ -1,0 +1,14 @@
+diff --git a/server.py b/server.py
+index 955fabc..712fab5 100644
+--- a/server.py
++++ b/server.py
+@@ -279,7 +279,8 @@ def mem_percent():
+         return None
+ 
+ 
+-def disk_percent(path="/"):
++def disk_percent(path=None):
++    path = path or os.environ.get("HUB_DISK_PATH") or "/"
+     try:
+         st = os.statvfs(path)
+     except (OSError, AttributeError):
