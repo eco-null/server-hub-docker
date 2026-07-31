@@ -11,6 +11,9 @@ if [ ! -f /data/services.json ]; then
   fi
 fi
 chown -R app:app /data
+# /app is root-owned (git clone) but upstream writes services.json.tmp alongside
+# services.json on every save, so the app user must own the whole tree.
+chown -R app:app /app
 ln -sf /data/services.json /app/services.json
 
 exec su-exec app python3 server.py
