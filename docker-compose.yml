@@ -1,7 +1,6 @@
 services:
   server-hub:
-    build: .
-    image: server-hub:local
+    image: ghcr.io/eco-null/server-hub:latest
     container_name: server-hub
     restart: unless-stopped
     ports:
