@@ -1,0 +1,28 @@
+services:
+  server-hub:
+    build: .
+    image: server-hub:local
+    container_name: server-hub
+    restart: unless-stopped
+    ports:
+      - "8643:8643"
+    env_file:
+      - .env
+    environment:
+      HUB_PORT: "8643"
+      HUB_HOST: "0.0.0.0"
+      HUB_DISK_PATH: "/host"
+    volumes:
+      - server-hub-data:/data
+      - /proc:/proc:ro
+      - /etc/hostname:/etc/hostname:ro
+      - /:/host:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8643/login"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  server-hub-data:
