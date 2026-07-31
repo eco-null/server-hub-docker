@@ -5,9 +5,9 @@ services:
     restart: unless-stopped
     ports:
       - "8643:8643"
-    env_file:
-      - .env
     environment:
+      HUB_USER: admin
+      HUB_PASSWORD: CHANGE_ME
       HUB_PORT: "8643"
       HUB_HOST: "0.0.0.0"
       HUB_DISK_PATH: "/host"

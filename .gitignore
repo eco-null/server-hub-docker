@@ -1,4 +1,3 @@
-.env
 services.json
 __pycache__/
 *.pyc
