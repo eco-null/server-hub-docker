@@ -12,16 +12,13 @@ services:
       HUB_HOST: "0.0.0.0"
       HUB_DISK_PATH: "/host"
     volumes:
-      - server-hub-data:/data
+      - /DATA/AppData/server-hub:/data
       - /proc:/proc:ro
       - /etc/hostname:/etc/hostname:ro
-      - /:/host:ro
+      - /etc:/host:ro
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8643/login"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 10s
-
-volumes:
-  server-hub-data:

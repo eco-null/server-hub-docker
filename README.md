@@ -31,11 +31,11 @@ Thin wrapper: runs the prebuilt `ghcr.io/eco-null/server-hub:latest` image non-r
 | `HUB_DISK_PATH` | `/` | Filesystem path read for the disk widget (`/host` = CasaOS host root) |
 
 ## Persistence
-- `services.json` (your added links) lives in the named volume `server-hub-data`, mounted at `/data` and symlinked to `/app/services.json`.
-- Updates: `docker compose pull && docker compose up -d`. Data survives because it lives on the volume, not in the image.
+- `services.json` (your added links) lives in the bind-mounted directory `./data` (mapped to `/DATA/AppData/server-hub` on the host), symlinked to `/app/services.json` inside the container.
+- Updates: `docker compose pull && docker compose up -d`. Data survives because it lives on the host path, not in the image.
 
 ## Host stats
-The compose file mounts the host's `/proc`, `/etc/hostname`, and root `/` read-only, so CPU / memory / disk / hostname widgets show the **CasaOS host's** values. The `HUB_DISK_PATH=/host` env var (backed by a small patch to upstream `server.py`) makes the disk widget read the host root. If a mount is unavailable the widget shows `—`; the app keeps serving.
+The compose file mounts the host's `/proc`, `/etc/hostname`, and `/etc` read-only, so CPU / memory / disk / hostname widgets show the **CasaOS host's** values. The `HUB_DISK_PATH=/host` env var (backed by a small patch to upstream `server.py`) makes the disk widget read the host filesystem. If a mount is unavailable the widget shows `—`; the app keeps serving.
 
 ## Security notes
 > **Before first start:** replace the placeholder `HUB_PASSWORD: CHANGE_ME` in the compose file — leaving it unchanged starts the server with a known, weak password.
