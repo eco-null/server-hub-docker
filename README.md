@@ -4,6 +4,8 @@
 
 Thin wrapper: runs the prebuilt `ghcr.io/eco-null/server-hub:latest` image non-root with persistent storage and **host** system stats.
 
+Includes the latest Server Hub dashboard features: compact two-column layout, bookmarks, wallpaper + dynamic theming, and Beszel multi-server stats.
+
 ## Prerequisites
 - Docker (with Compose v2)
 - CasaOS with the terminal available, or any docker-compose-capable host
@@ -32,8 +34,11 @@ Thin wrapper: runs the prebuilt `ghcr.io/eco-null/server-hub:latest` image non-r
 | `BESZEL_URL` | (empty) | Beszel hub URL (e.g. `http://beszel:9520`). Leave empty to disable multi-server stats. |
 | `BESZEL_USER` / `BESZEL_PASSWORD` | (empty) | Beszel login credentials used to fetch system stats. |
 
+## Beszel multi-server stats
+Set `BESZEL_URL` (e.g. `http://beszel:9520` or `https://bs.example.com`) plus `BESZEL_USER` / `BESZEL_PASSWORD` to watch CPU / memory / disk across all servers in your Beszel hub. The Beszel account must be a **member** of the systems you want to see (add it in the Beszel UI, or enable `SHARE_ALL_SYSTEMS` on the hub). When Beszel is unconfigured or unreachable, the dashboard falls back to the single-host stats widget.
+
 ## Persistence
-- `services.json` (your added links) lives in the bind-mounted directory `./data` (mapped to `/DATA/AppData/server-hub` on the host), symlinked to `/app/services.json` inside the container.
+- `services.json` (your added links and bookmarks) lives in the bind-mounted directory `./data` (mapped to `/DATA/AppData/server-hub` on the host), symlinked to `/app/services.json` inside the container.
 - Updates: `docker compose pull && docker compose up -d`. Data survives because it lives on the host path, not in the image.
 
 ## Host stats
@@ -43,7 +48,7 @@ The compose file mounts the host's `/proc`, `/etc/hostname`, and `/etc` read-onl
 > **Before first start:** replace the placeholder `HUB_PASSWORD: CHANGE_ME` in the compose file — leaving it unchanged starts the server with a known, weak password.
 
 - The container runs as a non-root `app` user; the entrypoint drops privileges with `su-exec` before starting the server.
-- The compose file bind-mounts `- /:/host:ro`, granting the container **read access to the whole host filesystem**. That tradeoff is required for host disk stats and is limited to this container's network — don't add other containers to this compose project.
+- The compose file bind-mounts `- /etc:/host:ro`, granting the container **read access to part of the host filesystem**. That tradeoff is required for host disk stats and is limited to this container's network — don't add other containers to this compose project.
 
 ## Troubleshooting
 | Symptom | Likely cause | Fix |
