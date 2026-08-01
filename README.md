@@ -1,3 +1,5 @@
+<p align="center"><img src="logo.png" width="120" height="120" alt="Server Hub logo"></p>
+
 # server-hub-docker
 
 > Docker packaging for [Server Hub](https://github.com/eco-null/server-hub) — a self-hosted launchpad for your apps and services.
@@ -22,6 +24,9 @@ Includes the latest Server Hub dashboard features: compact two-column layout, bo
 2. Paste the contents of `docker-compose.yml`.
 3. Set `HUB_USER` and `HUB_PASSWORD` in the compose env block (or the CasaOS environment form) to your values.
 4. Click **Install**. CasaOS pulls the prebuilt image `ghcr.io/eco-null/server-hub:latest` and starts the container.
+
+## Icon
+`logo.png` can be used as the CasaOS custom-app icon — when installing a custom app, point the icon field at this file (e.g. `/DATA/AppData/server-hub-docker/logo.png` or wherever you cloned the repo).
 
 ## Environment variables
 | Variable | Default | Notes |
