@@ -29,6 +29,8 @@ Thin wrapper: runs the prebuilt `ghcr.io/eco-null/server-hub:latest` image non-r
 | `HUB_PORT` | `8642` | Container listen port (compose sets `8643`) |
 | `HUB_HOST` | `0.0.0.0` | Bind address |
 | `HUB_DISK_PATH` | `/` | Filesystem path read for the disk widget (`/host` = CasaOS host root) |
+| `BESZEL_URL` | (empty) | Beszel hub URL (e.g. `http://beszel:9520`). Leave empty to disable multi-server stats. |
+| `BESZEL_USER` / `BESZEL_PASSWORD` | (empty) | Beszel login credentials used to fetch system stats. |
 
 ## Persistence
 - `services.json` (your added links) lives in the bind-mounted directory `./data` (mapped to `/DATA/AppData/server-hub` on the host), symlinked to `/app/services.json` inside the container.

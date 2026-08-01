@@ -11,6 +11,9 @@ services:
       HUB_PORT: "8643"
       HUB_HOST: "0.0.0.0"
       HUB_DISK_PATH: "/host"
+      BESZEL_URL: ""
+      BESZEL_USER: ""
+      BESZEL_PASSWORD: ""
     volumes:
       - /DATA/AppData/server-hub:/data
       - /proc:/proc:ro
